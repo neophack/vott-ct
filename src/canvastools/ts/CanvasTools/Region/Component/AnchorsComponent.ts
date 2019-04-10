@@ -15,7 +15,7 @@ export abstract class AnchorsComponent extends RegionComponent {
     /**
      * Default radius for anchor poitns. Can be redefined through CSS styles.
      */
-    public static DEFAULT_ANCHOR_RADIUS = 3;
+    public static DEFAULT_ANCHOR_RADIUS = 5;
 
     /**
      * Defailt radius for the ghost anchor, used activate dragging. Can be redefined through CSS styles.

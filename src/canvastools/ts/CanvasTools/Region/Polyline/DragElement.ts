@@ -19,24 +19,69 @@ export class DragElement extends DragComponent {
     constructor(paper: Snap.Paper, paperRect: Rect = null, regionData: RegionData, callbacks: IRegionCallbacks) {
         super(paper, paperRect, regionData, callbacks);
 
-        this.dragNode = paper.rect(this.x, this.y, this.width, this.height);
+        
+        let tmppoints=this.regionData.points;
+        let lastpoint=tmppoints.shift();
+        let tmpg=paper.g();
+        tmpg.addClass("neoLayer");
+        // var ind=0;
+        tmppoints.forEach((p) => {
+            const pointsData = [];
+            pointsData.push(lastpoint.x, lastpoint.y);
+            pointsData.push(p.x, p.y);
+            lastpoint=p;
+            
+            let tmpNode = paper.polyline(pointsData).attr({
+                strokeWidth: 20,
+                // stroke: '#b0dc9e85'
+            });;
+            tmpNode.addClass("primaryTagBoundRectStyle");
+            this.nodeList.push(tmpNode);
+            
+            tmpg.add(tmpNode);
+           
+        });
+        this.dragNode=tmpg;
         this.dragNode.addClass("dragRectStyle");
 
         this.node.add(this.dragNode);
-
         this.subscribeToDragEvents();
+        
+        
     }
 
     /**
      * Redraws the componnent.
      */
     public redraw() {
+ 
+        const pointsData = [];
+        let tmppoints=this.regionData.points;
+        let lastpoint=tmppoints.shift();
+
+        const strlist=[];
+        tmppoints.forEach((p) => {
+            const pointsData = [];
+            pointsData.push(lastpoint.x, lastpoint.y);
+            pointsData.push(p.x, p.y);
+            lastpoint=p;
+            strlist.push(pointsData.toString());
+           
+        });
         window.requestAnimationFrame(() => {
-            this.dragNode.attr({
-                x: this.x,
-                y: this.y,
-                width: this.width,
-                height: this.height,
+           this.nodeList.forEach((tmpnode) => {
+            tmpnode.attr({
+                points: strlist.pop()
+           
+            });
+            // this.dragNode=tmpg;
+                // this.dragNode.attr({
+                //      points: pointsData.toString(),
+                //     x: this.x,
+                //     y: this.y,
+                //     width: this.width,
+                //     height: this.height,
+                // });
             });
         });
     }

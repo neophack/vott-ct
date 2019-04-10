@@ -15,6 +15,9 @@ export abstract class DragComponent extends RegionComponent {
      * Grouping element for internal drag elements.
      */
     protected dragNode: Snap.Element;
+    
+    //nodelist
+    protected  nodeList = [];
 
     /**
      * Dragging state of the component.
