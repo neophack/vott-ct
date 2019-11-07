@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "commonjs",
+
+        "declaration": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+
+        "isolatedModules": false,
+        "sourceMap": true,      
+                
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "paths": {
+        },
+        "outDir": "dist"
+        /* "outFile": "dist/ct.js" */
+    },
+    "include": [     
+        "src/canvastools/ts/*.ts"
+    ]
+}

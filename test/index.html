@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/index.css" />
+    <title>CanvasTools Demo</title>
+</head>
+
+<body>
+    <div id="ctZone">
+        <div id="toolbarzone">
+        </div>
+        <div id="selectionzone"  style="z-index: 0;height: 100%;text-align: center;">
+            <div id="editorzone"></div>
+        </div>
+    </div>
+
+    <div>Some text <input type="text" /></div>
+</body>
+<script src="../dist/ct.dev.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", (e) => {
+        var ct = CanvasTools;
+        var sz = document.getElementById("editorzone");
+        var tz = document.getElementById("toolbarzone");
+        console.log(ct,sz,tz);
+
+        var editor = new ct.Editor(sz);
+        editor.addToolbar(tz, ct.Editor.FullToolbarSet, "./images/icons/");
+
+        var incrementalRegionID = 100;
+
+        editor.onSelectionEnd = (regionData) => {
+            let id = (incrementalRegionID++).toString();
+            let tags = generateTagDescriptor();            
+            editor.RM.addRegion(id, regionData, tags);
+            console.log(regionData.toString());
+        }
+
+        let primaryTag = new ct.Core.Tag(
+                        (Math.random() > 0.5) ? "Awesome" : "Brilliante",
+                        Math.floor(Math.random() * 360.0));
+        let secondaryTag = new ct.Core.Tag(
+                        (Math.random() > 0.5) ? "Yes" : "No",
+                        Math.floor(Math.random() * 360.0));
+        let ternaryTag = new ct.Core.Tag(
+                        (Math.random() > 0.5) ? "one" : "two",
+                        Math.floor(Math.random() * 360.0));
+
+        function generateTagDescriptor() {
+            let rnd = Math.random();
+            let tags;
+            
+            if (rnd < 0.25) {
+                tags = new ct.Core.TagsDescriptor(primaryTag, [secondaryTag, ternaryTag]);
+            } else if (rnd < 0.5) {
+                tags = new ct.Core.TagsDescriptor(secondaryTag, [ternaryTag, primaryTag]);
+            } else if (rnd < 0.75) {
+                tags = new ct.Core.TagsDescriptor(ternaryTag, [primaryTag, secondaryTag]);
+            } else {
+                tags = null;
+            }
+            return tags
+        }
+        
+        editor.onRegionMove = (id, regionData) => {
+            //console.log(`Moved ${id}: {${x}, ${y}} x {${width}, ${height}}`);
+        }
+
+        // Upload background image for selection 
+        let imagePath = "./images/background-cat-hd.jpg";
+        let image = new Image();
+        image.addEventListener("load", (e) => {
+            editor.addContentSource(e.target);
+        });
+        image.src = imagePath;
+    });
+</script>
+<style>
+    body {
+	overflow:scroll;
+    overflow-x:hidden;
+	overflow-y:hidden;
+}
+</style>
+</html>
